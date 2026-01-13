@@ -1,0 +1,11 @@
+.app-bar {
+  display: grid;
+  align-items: center;
+  height: max-content;
+  grid-template-columns: 1fr;
+
+  &>* {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+  }
+}
