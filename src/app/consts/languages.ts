@@ -70,6 +70,3 @@ export const languagesByName = {
   armenian: "hye",
   welsh: "cym",
 } as const;
-
-export type LangName = keyof typeof languagesByName;
-export type LangCode = (typeof languagesByName)[LangName];

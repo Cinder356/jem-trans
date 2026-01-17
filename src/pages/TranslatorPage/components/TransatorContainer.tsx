@@ -4,15 +4,18 @@ import { Textarea } from '@/components/ui/textarea';
 import useTranslation from '../hooks/useTranslation';
 import useTranslator from '../hooks/useTranslator';
 import useSettings from '@/app/hooks/useSettings';
+import useDetectAndSwap from '../hooks/useDetectAndSwap';
 
 export default () => {
   const { getProperty } = useSettings();
-  const { getSourceText, updateSourceText, translation, setTranslation, langPair, detectAndSwapLangs } = useTranslation();
+  const { getSourceText, updateSourceText, translation, setTranslation, langPair } = useTranslation();
   const { translateViaLlm } = useTranslator();
+  const detectAndSwapLangs = useDetectAndSwap();
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    updateSourceText(e.target.value);
-    detectAndSwapLangs();
+    const sourceValue = e.target.value;
+    updateSourceText(sourceValue);
+    detectAndSwapLangs(sourceValue, langPair);
   }
 
   const handleTranslate = () => {

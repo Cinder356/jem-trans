@@ -7,7 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { languagesByName, type LangCode } from '@/app/consts/languages';
+import { languagesByName } from '@/app/consts/languages';
+import type { LangCode } from "@/app/types/Langs";
 import useTranslation from "../hooks/useTranslation";
 
 const langOptions: [string, LangCode][] = Object.entries(languagesByName);

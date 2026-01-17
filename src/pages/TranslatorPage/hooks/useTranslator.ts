@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { type LangDetectionResult } from '@/app/types/LangDetectionResult';
-import { type LangCode } from "@/app/consts/languages";
+import type { LangCode } from "@/app/types/Langs";
 import { getTranslationPrompt } from "@/app/consts/prompts";
 import useLlmService from "@/app/hooks/useLlmService";
 // import useSettings from "@/app/hooks/useSettings";
