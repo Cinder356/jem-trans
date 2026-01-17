@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant gtk-theme (&:is(.gtk-theme *));
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -45,74 +46,61 @@
 }
 
 :root {
-  --body-margin: 5px;
+  --body-margin: .5rem;
 
   --radius: 0.625rem;
 
-  --background: var(--gtk-bg);
-  --foreground: var(--gtk-fg);
+  /* xs теперь как старый sm */
+  --text-xs: 0.875rem;
+  --text-xs--line-height: 1.25rem;
 
-  /* UI Containers (Cards, Popovers) */
-  --card: var(--gtk-base);
-  --card-foreground: var(--gtk-text);
-  --popover: var(--gtk-base);
-  --popover-foreground: var(--gtk-text);
+  /* sm теперь как старый base (это увеличит Shadcn компоненты) */
+  --text-sm: 1rem;
+  --text-sm--line-height: 1.5rem;
 
-  /* Primary Branding (Using your Accent) */
-  --primary: var(--gtk-accent);
-  --primary-foreground: var(--gtk-accent-fg);
-  /* --primary: var(--gtk-bg); */
-  /* --primary-foreground: var(--gtk-fg); */
+  /* base теперь как старый lg (основной текст) */
+  --text-base: 1.125rem;
+  --text-base--line-height: 1.75rem;
 
-  /* Secondary / Muted */
-  --secondary: var(--gtk-disabled-bg);
-  --secondary-foreground: var(--gtk-disabled-fg);
-  --muted: var(--gtk-disabled-bg);
-  --muted-foreground: var(--gtk-disabled-fg);
+  /* lg теперь как старый xl */
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.75rem;
 
-  /* Functional Colors */
-  --accent: var(--gtk-accent);
-  --accent-foreground: var(--gtk-accent-fg);
+  /* xl теперь как старый 2xl */
+  --text-xl: 1.5rem;
+  --text-xl--line-height: 2rem;
 
-  --destructive: var(--gtk-error);
-  --destructive-foreground: var(--gtk-bg);
-  /* Usually light text on error */
-
-  /* Borders and Inputs */
-  --border: var(--gtk-accent);
-  --input: var(--gtk-accent);
-  --ring: var(--gtk-accent);
-  /* --background: oklch(1 0 0); */
-  /* --foreground: oklch(0.145 0 0); */
-  /* --card: oklch(1 0 0); */
-  /* --card-foreground: oklch(0.145 0 0); */
-  /* --popover: oklch(1 0 0); */
-  /* --popover-foreground: oklch(0.145 0 0); */
-  /* --primary: oklch(0.205 0 0); */
-  /* --primary-foreground: oklch(0.985 0 0); */
-  /* --secondary: oklch(0.97 0 0); */
-  /* --secondary-foreground: oklch(0.205 0 0); */
-  /* --muted: oklch(0.97 0 0); */
-  /* --muted-foreground: oklch(0.556 0 0); */
-  /* --accent: oklch(0.97 0 0); */
-  /* --accent-foreground: oklch(0.205 0 0); */
-  /* --destructive: oklch(0.577 0.245 27.325); */
-  /* --border: oklch(0.922 0 0); */
-  /* --input: oklch(0.922 0 0); */
-  /* --ring: oklch(0.708 0 0); */
-  /* --chart-1: oklch(0.646 0.222 41.116); */
-  /* --chart-2: oklch(0.6 0.118 184.704); */
-  /* --chart-3: oklch(0.398 0.07 227.392); */
-  /* --chart-4: oklch(0.828 0.189 84.429); */
-  /* --chart-5: oklch(0.769 0.188 70.08); */
-  /* --sidebar: oklch(0.985 0 0); */
-  /* --sidebar-foreground: oklch(0.145 0 0); */
-  /* --sidebar-primary: oklch(0.205 0 0); */
-  /* --sidebar-primary-foreground: oklch(0.985 0 0); */
-  /* --sidebar-accent: oklch(0.97 0 0); */
-  /* --sidebar-accent-foreground: oklch(0.205 0 0); */
-  /* --sidebar-border: oklch(0.922 0 0); */
-  /* --sidebar-ring: oklch(0.708 0 0); */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
 .dark {
@@ -149,12 +137,49 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+
+.gtk-theme {
+  --background: var(--gtk-bg);
+  --foreground: var(--gtk-fg);
+
+  /* UI Containers (Cards, Popovers) */
+  --card: var(--gtk-base);
+  --card-foreground: var(--gtk-text);
+  --popover: var(--gtk-base);
+  --popover-foreground: var(--gtk-text);
+
+  /* Primary Branding (Using your Accent) */
+  --primary: var(--gtk-accent);
+  --primary-foreground: var(--gtk-accent-fg);
+  /* --primary: var(--gtk-bg); */
+  /* --primary-foreground: var(--gtk-fg); */
+
+  /* Secondary / Muted */
+  --secondary: var(--gtk-disabled-bg);
+  --secondary-foreground: var(--gtk-disabled-fg);
+  --muted: var(--gtk-disabled-bg);
+  --muted-foreground: var(--gtk-disabled-fg);
+
+  /* Functional Colors */
+  --accent: var(--gtk-accent);
+  --accent-foreground: var(--gtk-accent-fg);
+
+  --destructive: var(--gtk-error);
+  --destructive-foreground: var(--gtk-bg);
+  /* Usually light text on error */
+
+  /* Borders and Inputs */
+  --border: var(--gtk-accent);
+  --input: var(--gtk-accent);
+  --ring: var(--gtk-accent);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
     /* font-size: 18px; */
     font-size: 16px;
-    font-weight: bold;
+    /* font-weight: bold; */
   }
 
   body {

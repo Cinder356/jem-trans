@@ -29,6 +29,7 @@ export interface TranslationContextValue {
   updateSourceText: UpdateSourceTextFn;
   translation: string;
   setTranslation: Dispatch<string>;
+  swapLangs: () => void;
 }
 
 export const TranslationContext = createContext<TranslationContextValue | null>(null);
@@ -73,6 +74,14 @@ export const TranslationProvider = ({ children }: PropsWithChildren) => {
   const getSourceText: GetSourceTextFn = useCallback(() => sourceTextRef.current, []);
   const updateSourceText: UpdateSourceTextFn = useCallback((value) => { sourceTextRef.current = value }, []);
 
+  const swapLangs = useCallback(() => {
+    if (langPairRef.current.source === 'auto') return;
+    updateLangPair({
+      source: langPairRef.current.target,
+      target: langPairRef.current.source
+    });
+  }, [])
+
   const contextValue = useMemo<TranslationContextValue>(() => ({
     langPair,
     updateLangPair,
@@ -81,7 +90,8 @@ export const TranslationProvider = ({ children }: PropsWithChildren) => {
     updateSourceText,
     translation,
     setTranslation,
-  }), [langPair, translation, detectAndSwapLangs, updateLangPair, getSourceText])
+    swapLangs
+  }), [langPair, translation, detectAndSwapLangs, updateLangPair, getSourceText, swapLangs])
 
   return (
     <TranslationContext.Provider value={contextValue}>

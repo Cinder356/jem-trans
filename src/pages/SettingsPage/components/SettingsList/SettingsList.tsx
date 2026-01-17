@@ -11,7 +11,7 @@ export default function () {
 
   return (
     <div className="settings-list">
-      <p className='text-xs font-normal opacity-20'>
+      <p className='text-xs leading-tight font-normal opacity-20'>
         This app uses OpenRouter API. So, you need to enter model name and your API key. You can find this on OpenRouter website.
       </p>
       <TextProperty id='model-input' label='Model'

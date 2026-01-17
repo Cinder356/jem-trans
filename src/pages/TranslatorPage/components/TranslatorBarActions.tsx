@@ -1,5 +1,4 @@
 import { ArrowRightLeft } from "lucide-react";
-import IconButton from "@/components/ui/IconButton/IconButton";
 import AppBarActions from "@/components/AppBar/AppBarActions";
 import {
   Select,
@@ -14,17 +13,18 @@ import useTranslation from "../hooks/useTranslation";
 const langOptions: [string, LangCode][] = Object.entries(languagesByName);
 
 export default function () {
-  const { langPair, updateLangPair } = useTranslation();
+  const { langPair, updateLangPair, swapLangs } = useTranslation();
 
   return (
     <AppBarActions>
-      <div className="flex gap-2 h-full items-center justify-center">
+      <div className="flex gap-2 h-full items-center justify-center select-none">
 
-        <Select value={langPair.target} onValueChange={(newVal: LangCode) => updateLangPair({ target: newVal })}>
+        <Select value={langPair.source} onValueChange={(newVal: LangCode | 'auto') => updateLangPair({ source: newVal })}>
           <SelectTrigger size="sm" className="w-32 p-2 capitalize">
             <SelectValue placeholder="Choose language" />
           </SelectTrigger>
           <SelectContent position="popper">
+            <SelectItem key={'auto-target'} value="auto" >Auto</SelectItem>
             {langOptions.map(([langName, langCode]) =>
               <SelectItem key={langCode + '-target'} className="capitalize" value={langCode}>
                 {langName}
@@ -33,7 +33,7 @@ export default function () {
           </SelectContent>
         </Select>
 
-        <IconButton><ArrowRightLeft /></IconButton>
+        <ArrowRightLeft className="cursor-pointer" onClick={swapLangs} />
 
         <Select value={langPair.target} onValueChange={(newVal: LangCode) => updateLangPair({ target: newVal })}>
           <SelectTrigger size="sm" className="w-32 p-2 capitalize">

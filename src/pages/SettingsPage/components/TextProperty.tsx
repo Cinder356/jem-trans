@@ -12,7 +12,7 @@ export default function ({ id, label, defaultValue, onChange }: TextPropertyProp
 
   return (
     <div className='grid w-full items-center gap-1.5'>
-      <Label htmlFor={id}>{label}: </Label>
+      <Label className='text-inherit' htmlFor={id}>{label}: </Label>
       <Input defaultValue={defaultValue || ''} onChange={(e) => onChange(e.target.value)} className='h-8' id={id} />
     </div>
   )

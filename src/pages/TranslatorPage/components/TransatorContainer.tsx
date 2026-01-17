@@ -1,15 +1,14 @@
 import { type ChangeEvent } from 'react';
+import { ChevronsRightIcon, MicIcon, Volume2 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
 import useTranslation from '../hooks/useTranslation';
 import useTranslator from '../hooks/useTranslator';
-import { Input } from '@/components/ui/input';
+import useSettings from '@/app/hooks/useSettings';
 
 export default () => {
-  const { getSourceText, updateSourceText, translation, setTranslation, langPair, updateLangPair, detectAndSwapLangs } = useTranslation();
+  const { getProperty } = useSettings();
+  const { getSourceText, updateSourceText, translation, setTranslation, langPair, detectAndSwapLangs } = useTranslation();
   const { translateViaLlm } = useTranslator();
-
-  console.log("СУКА, РЕНДЕР!!");
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     updateSourceText(e.target.value);
@@ -28,11 +27,26 @@ export default () => {
 
   return (
     <div className="grid gap-2 mt-2 grid-cols-2 grid-rows-[auto_auto]">
-      <Textarea className='flex-1 resize-none min-h-30' onChange={handleChange} />
-      <Textarea className='flex-1 resize-none' readOnly value={translation} />
-      <div className="flex gap-2 justify-center col-span-2 row-start-2 row-end-2">
-        <Button size='sm' onClick={handleTranslate}>Translate</Button>
+      <div className="relative">
+        <Textarea className='flex-1 resize-none min-h-40' onChange={handleChange} />
+        <div className="absolute bottom-1.5 right-1.5 flex items-center gap-2">
+          <div className='flex gap-1.5 p-0.5'>
+            <Volume2 className='cursor-pointer' />
+            <MicIcon className='cursor-pointer' />
+            {!getProperty('languagesAutoChange') &&
+              <ChevronsRightIcon onClick={handleTranslate} className='cursor-pointer' />
+            }
+          </div>
+        </div>
       </div>
+      <div className="relative">
+        <Textarea className='flex-1 resize-none min-h-40' readOnly value={translation} />
+        <div className="absolute bottom-1.5 right-1.5 flex items-center gap-2 p-0.5">
+          <Volume2 className='cursor-pointer' />
+        </div>
+      </div>
+      {/* <div className="flex gap-2 justify-center col-span-2 row-start-2 row-end-2"> */}
+      {/* </div> */}
     </div >
   )
 }

@@ -19,7 +19,7 @@ export default function () {
     <AppBarActions>
       <div className="grid items-center grid-cols-[1fr_auto_1fr]">
         <div />
-        <h1 className="text-xl">Settings</h1>
+        <h1 className="text-2xl font-bold">Settings</h1>
         <div className="flex justify-end">
           <Button className="font-bold rounded-xl" variant="outline" size="sm"
             disabled={isSaved} onClick={handleSave}>
