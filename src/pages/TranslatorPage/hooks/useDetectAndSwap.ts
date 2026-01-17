@@ -6,7 +6,7 @@ import useTranslator from "./useTranslator";
 
 type DetectAndSwapLangsFn = (text: string, currentPair: LangPair) => void;
 
-export const DETECT_AND_SWAP_QUERY_KEY = ['detect-key'];
+export const DETECT_AND_SWAP_QUERY_KEY = ['detect-key'] as const;
 
 export default () => {
   const { swapLangs } = useTranslation();

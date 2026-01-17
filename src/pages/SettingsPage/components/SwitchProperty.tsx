@@ -11,7 +11,7 @@ interface SwitchPropertyProps {
 
 export default ({ id, label, defaultValue, onChange }: SwitchPropertyProps) => {
   return (
-    <div className='flex justify-between mx-auto gap-x-20'>
+    <div className='flex w-full max-w-xs justify-between mx-auto'>
       <Label htmlFor={id}>{label}: </Label>
       <Switch id={id} defaultChecked={defaultValue} onCheckedChange={onChange} />
     </div>

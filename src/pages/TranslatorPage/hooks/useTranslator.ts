@@ -5,13 +5,13 @@ import { getTranslationPrompt } from "@/app/consts/prompts";
 import useLlmService from "@/app/hooks/useLlmService";
 // import useSettings from "@/app/hooks/useSettings";
 
-interface TranslateParams {
+export interface TranslateParams {
   term: string;
   sourceLang: LangCode | 'auto';
   targetLang: LangCode;
 }
 
-interface TranslationResponse {
+export interface TranslateResponse {
   translation: string;
 }
 
@@ -20,7 +20,7 @@ export default () => {
 
   const translateViaLlm = async ({ term, sourceLang, targetLang }: TranslateParams) => {
     const prompt = getTranslationPrompt({ term, sourceLang, targetLang });
-    return JSON.parse(await llm.generate(prompt)) as Promise<TranslationResponse>;
+    return JSON.parse(await llm.generate(prompt)) as Promise<TranslateResponse>;
   }
 
   const detectLang = async (text: string, whitelist?: LangCode[]) => {

@@ -1,16 +1,19 @@
 import { type ChangeEvent } from 'react';
 import { ChevronsRightIcon, MicIcon, Volume2 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
+import { Spinner } from '@/components/ui/spinner';
+import { cn } from '@/lib/utils';
 import useTranslation from '../hooks/useTranslation';
-import useTranslator from '../hooks/useTranslator';
 import useSettings from '@/app/hooks/useSettings';
 import useDetectAndSwap from '../hooks/useDetectAndSwap';
 
 export default () => {
   const { getProperty } = useSettings();
-  const { getSourceText, updateSourceText, translation, setTranslation, langPair } = useTranslation();
-  const { translateViaLlm } = useTranslator();
   const detectAndSwapLangs = useDetectAndSwap();
+  const {
+    translationResult: { translation, isFetching },
+    translateCurrent, updateSourceText, langPair
+  } = useTranslation();
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const sourceValue = e.target.value;
@@ -19,13 +22,7 @@ export default () => {
   }
 
   const handleTranslate = () => {
-    translateViaLlm({
-      term: getSourceText(),
-      sourceLang: langPair.source,
-      targetLang: langPair.target
-    })
-      .then(value => setTranslation(value.translation))
-      .catch(() => setTranslation('error :('))
+    translateCurrent();
   }
 
   return (
@@ -36,20 +33,22 @@ export default () => {
           <div className='flex gap-1.5 p-0.5'>
             <Volume2 className='cursor-pointer' />
             <MicIcon className='cursor-pointer' />
-            {!getProperty('languagesAutoChange') &&
+            {!getProperty('isAutoTranslateEnabled') &&
               <ChevronsRightIcon onClick={handleTranslate} className='cursor-pointer' />
             }
           </div>
         </div>
       </div>
-      <div className="relative">
+      <div aria-busy={isFetching} className={cn(
+        'relative transition-opacity duration-400 ease-in-out',
+        isFetching && 'opacity-50'
+      )}>
         <Textarea className='flex-1 resize-none min-h-40' readOnly value={translation} />
         <div className="absolute bottom-1.5 right-1.5 flex items-center gap-2 p-0.5">
           <Volume2 className='cursor-pointer' />
         </div>
+        {isFetching && <Spinner className='size-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2' />}
       </div>
-      {/* <div className="flex gap-2 justify-center col-span-2 row-start-2 row-end-2"> */}
-      {/* </div> */}
     </div >
   )
 }

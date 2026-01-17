@@ -6,7 +6,9 @@ export interface AppSettings {
   llmService: LlmServiceName;
   model: string;
   apiKey: string;
-  languagesAutoChange: boolean;
+  isAutoLanguageSwitchEnabled: boolean;
+  isAutoTranslateEnabled: boolean;
+  autoTranslateDelay: number;
 }
 
 const store = new LazyStore('settings.json');

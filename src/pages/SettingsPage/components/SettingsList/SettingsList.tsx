@@ -3,6 +3,7 @@ import useSettings from "@/app/hooks/useSettings";
 import TextProperty from "../TextProperty";
 import SwitchProperty from '../SwitchProperty';
 import './SettingsList.scss';
+import SliderProperty from "../SliderProperty";
 
 export default function () {
   const { getProperty, changeProperty, restoreSettings } = useSettings();
@@ -20,9 +21,16 @@ export default function () {
       <TextProperty id='api-key-input' label='API Key'
         defaultValue={getProperty('apiKey')}
         onChange={(value) => changeProperty('apiKey', value)} />
-      <SwitchProperty id='languages-auto-change-switch' label='Languages auto change'
-        defaultValue={getProperty('languagesAutoChange')}
-        onChange={(value) => changeProperty('languagesAutoChange', value)} />
+      <SwitchProperty id='auto-language-switching-switch' label='Auto language switching'
+        defaultValue={getProperty('isAutoLanguageSwitchEnabled')}
+        onChange={(value) => changeProperty('isAutoLanguageSwitchEnabled', value)} />
+      <SwitchProperty id='auto-translate-switch' label='Auto translate'
+        defaultValue={getProperty('isAutoTranslateEnabled')}
+        onChange={(value) => changeProperty('isAutoTranslateEnabled', value)} />
+      <SliderProperty label="Auto translate delay (ms)" max={2000} step={10}
+        defaultValue={getProperty('autoTranslateDelay')}
+        onChange={(value) => changeProperty('autoTranslateDelay', value)} />
+      <br />
     </div>
   )
 }
