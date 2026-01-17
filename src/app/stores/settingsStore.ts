@@ -1,6 +1,6 @@
 import { LazyStore } from '@tauri-apps/plugin-store';
 import { type LlmServiceName } from '../types/LlmService';
-import { DEFAULT_SETTINGS } from '../consts/defaultSettings';
+import { DEFAULT_SETTINGS } from '../consts/defaultStoresValues';
 
 export interface AppSettings {
   llmService: LlmServiceName;

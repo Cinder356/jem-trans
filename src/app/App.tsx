@@ -6,6 +6,7 @@ import Outlet from '@/components/Outlet/Outlet';
 import { PageProvider } from './contexts/PageContext';
 import { SettingsProvider } from './contexts/SettingsContext';
 import { LlmServiceProvider } from './contexts/LlmServiceContext';
+import { UserMetaProvider } from './contexts/UserMetaContext';
 
 import { useEffect } from 'react';
 
@@ -22,14 +23,16 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SettingsProvider>
-        <LlmServiceProvider>
-          <PageProvider>
-            <AppBar />
-            <main>
-              <Outlet />
-            </main>
-          </PageProvider>
-        </LlmServiceProvider>
+        <UserMetaProvider>
+          <LlmServiceProvider>
+            <PageProvider>
+              <AppBar />
+              <main>
+                <Outlet />
+              </main>
+            </PageProvider>
+          </LlmServiceProvider>
+        </UserMetaProvider>
       </SettingsProvider>
     </QueryClientProvider>
   );

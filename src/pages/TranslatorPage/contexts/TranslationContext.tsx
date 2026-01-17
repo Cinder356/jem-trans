@@ -5,15 +5,11 @@ import { DETECT_AND_SWAP_QUERY_KEY } from '../hooks/useDetectAndSwap';
 import useTranslateQuery, { type UseTranslateQueryResult } from '../hooks/useTranslateQuery';
 import { useDebouncedCallback } from '@/app/hooks/useDebouncedCallback';
 import useSettings from '@/app/hooks/useSettings';
+import useUserMeta from '@/app/hooks/useUserMeta';
 
 type UpdateLangPairFn = (value: Partial<LangPair>) => void;
 type GetSourceTextFn = () => string;
 type UpdateSourceTextFn = (value: string) => void;
-
-const DEFAULT_LANG_PAIR: LangPair = {
-  source: 'auto',
-  target: 'eng'
-} as const;
 
 export interface TranslationContextValue {
   translationResult: UseTranslateQueryResult;
@@ -29,8 +25,9 @@ export const TranslationContext = createContext<TranslationContextValue | null>(
 
 export const TranslationProvider = ({ children }: PropsWithChildren) => {
   const { getProperty } = useSettings();
+  const { getUserMeta, setUserMeta } = useUserMeta();
   const queryClient = useQueryClient();
-  const [langPair, setLangPair] = useState<LangPair>(DEFAULT_LANG_PAIR);
+  const [langPair, setLangPair] = useState<LangPair>(getUserMeta('lastLangPair'));
   const sourceTextRef = useRef<string>('');
   const [textForQuery, setTextForQuery] = useState('');
   const translationResult = useTranslateQuery({ term: textForQuery, sourceLang: langPair.source, targetLang: langPair.target });
@@ -40,7 +37,11 @@ export const TranslationProvider = ({ children }: PropsWithChildren) => {
 
   const updateLangPair: UpdateLangPairFn = useCallback((value) => {
     queryClient.cancelQueries({ queryKey: DETECT_AND_SWAP_QUERY_KEY });
-    setLangPair(prev => ({ ...prev, ...value }));
+    setLangPair(prev => {
+      const newValue = { ...prev, ...value };
+      setUserMeta('lastLangPair', newValue);
+      return newValue;
+    });
   }, [])
 
   const getSourceText: GetSourceTextFn = useCallback(() => sourceTextRef.current, []);

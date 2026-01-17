@@ -39,13 +39,15 @@ export default () => {
           </div>
         </div>
       </div>
-      <div aria-busy={isFetching} className={cn(
-        'relative transition-opacity duration-400 ease-in-out',
-        isFetching && 'opacity-50'
-      )}>
-        <Textarea className='flex-1 resize-none min-h-40' readOnly value={translation} />
-        <div className="absolute bottom-1.5 right-1.5 flex items-center gap-2 p-0.5">
-          <Volume2 className='cursor-pointer' />
+      <div className="relative">
+        <div aria-busy={isFetching} className={cn(
+          'transition-opacity duration-400 ease-in-out',
+          isFetching && 'opacity-50'
+        )}>
+          <Textarea className='flex-1 resize-none min-h-40' readOnly value={translation} />
+          <div className="absolute bottom-1.5 right-1.5 flex items-center gap-2 p-0.5">
+            <Volume2 className='cursor-pointer' />
+          </div>
         </div>
         {isFetching && <Spinner className='size-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2' />}
       </div>
