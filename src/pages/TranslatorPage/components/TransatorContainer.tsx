@@ -11,7 +11,7 @@ export default () => {
   const { getProperty } = useSettings();
   const detectAndSwapLangs = useDetectAndSwap();
   const {
-    translationResult: { translation, isFetching },
+    translationResult: { translation, isFetching, isError, error },
     translateCurrent, updateSourceText, langPair
   } = useTranslation();
 
@@ -44,7 +44,10 @@ export default () => {
           'transition-opacity duration-400 ease-in-out',
           isFetching && 'opacity-50'
         )}>
-          <Textarea className='flex-1 resize-none min-h-40' readOnly value={translation} />
+          <Textarea className={cn(
+            'flex-1 resize-none min-h-40',
+            isError && 'text-red-400'
+          )} readOnly value={translation || error?.message} />
           <div className="absolute bottom-1.5 right-1.5 flex items-center gap-2 p-0.5">
             <Volume2 className='cursor-pointer' />
           </div>

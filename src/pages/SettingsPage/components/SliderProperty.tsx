@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Slider } from "@/components/ui/slider"
-import { Label } from "@radix-ui/react-label"
+import LabelWithHint from './LabelWithHint';
 
 interface SliderPropertyProps {
   label: string;
@@ -8,15 +8,16 @@ interface SliderPropertyProps {
   max: number;
   step: number;
   onChange: (value: number) => void;
+  hint: string;
 }
 
-export default ({ label, defaultValue, max, step, onChange }: SliderPropertyProps) => {
+export default ({ label, defaultValue, max, step, onChange, hint }: SliderPropertyProps) => {
   const [sliderValue, setSliderValue] = useState(defaultValue);
 
   return (
     <div>
       <div className="flex justify-between">
-        <Label>{label}:</Label>
+        <LabelWithHint label={label} hint={hint} />
         <p>{sliderValue}</p>
       </div>
       <Slider

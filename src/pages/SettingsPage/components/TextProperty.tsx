@@ -1,18 +1,19 @@
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import LabelWithHint from './LabelWithHint';
 
 interface TextPropertyProps {
   id: string;
   label: string;
   defaultValue?: string;
   onChange: (value: string) => void;
+  hint?: string;
 }
 
-export default function ({ id, label, defaultValue, onChange }: TextPropertyProps) {
+export default function ({ id, label, defaultValue, onChange, hint }: TextPropertyProps) {
 
   return (
     <div className='grid w-full items-center gap-1.5'>
-      <Label className='text-inherit' htmlFor={id}>{label}: </Label>
+      <LabelWithHint htmlFor={id} label={label} hint={hint} />
       <Input defaultValue={defaultValue || ''} onChange={(e) => onChange(e.target.value)} className='h-8' id={id} />
     </div>
   )
