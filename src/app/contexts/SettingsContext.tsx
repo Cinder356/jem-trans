@@ -16,7 +16,7 @@ interface SettingsContextValue {
 export const SettingsContext = createContext<SettingsContextValue | null>(null);
 
 export const SettingsProvider = ({ children }: PropsWithChildren) => {
-  const savedSettingRef = useRef<AppSettings | null>(null);
+  const savedSettingsRef = useRef<AppSettings | null>(null);
   const settingsRef = useRef<AppSettings | null>(null);
   const [isSaved, setIsSaved] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -25,15 +25,15 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
     getAllConfigs()
       .then((value) => {
         settingsRef.current = value;
-        savedSettingRef.current = value;
+        savedSettingsRef.current = value;
         setIsLoaded(true);
       });
   }, []);
 
   const getProperty: GetPropertyFn = (key) => {
-    if (!savedSettingRef.current)
+    if (!savedSettingsRef.current)
       throw new Error('savedSettingsRef.current is null. Settings were not loaded.');
-    return savedSettingRef.current[key];
+    return savedSettingsRef.current[key];
   }
 
   const changeProperty: ChangePropertyFn = (key, value) => {
@@ -53,11 +53,11 @@ export const SettingsProvider = ({ children }: PropsWithChildren) => {
       await Promise.all(promises);
     })();
     setIsSaved(true);
-    savedSettingRef.current = settingsRef.current;
+    savedSettingsRef.current = settingsRef.current;
   }
 
   const restoreSettings = () => {
-    settingsRef.current = savedSettingRef.current;
+    settingsRef.current = savedSettingsRef.current;
     setIsSaved(true);
   }
 

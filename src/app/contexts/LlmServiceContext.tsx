@@ -1,6 +1,7 @@
 import { createContext, useRef, type PropsWithChildren } from "react";
 import { type LlmService } from "../types/LlmService";
 import OpenRouterService from "../llmServices/OpenRouterService";
+import LlamaService from "../llmServices/LlamaService";
 import useSettings from "../hooks/useSettings";
 
 export const LlmServiceContext = createContext<LlmService | null>(null);
@@ -11,13 +12,19 @@ export const LlmServiceProvider = ({ children }: PropsWithChildren) => {
 
   if (!llmServiceRef.current) {
     // choosing service logic
-    // const llmServiceName = getProperty('llmService');
-
-    llmServiceRef.current = new OpenRouterService();
+    const llmServiceName = getProperty('llmService');
+    switch (llmServiceName) {
+      case 'openrouter':
+        llmServiceRef.current = new OpenRouterService();
+        break;
+      case 'llama':
+        llmServiceRef.current = new LlamaService();
+    }
 
     llmServiceRef.current.configure({
       model: getProperty('model'),
-      apiKey: getProperty('apiKey')
+      apiKey: getProperty('apiKey'),
+      address: getProperty('serviceAddress')
     });
   }
 

@@ -4,6 +4,7 @@ import { DEFAULT_SETTINGS } from '../consts/defaultStoresValues';
 
 export interface AppSettings {
   llmService: LlmServiceName;
+  serviceAddress: string;
   model: string;
   apiKey: string;
   isAutoLanguageSwitchEnabled: boolean;

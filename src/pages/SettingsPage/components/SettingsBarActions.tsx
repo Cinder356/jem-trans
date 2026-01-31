@@ -12,6 +12,7 @@ export default function () {
     llmService.configure({
       model: getProperty('model'),
       apiKey: getProperty('apiKey'),
+      address: getProperty('serviceAddress')
     });
   }
 

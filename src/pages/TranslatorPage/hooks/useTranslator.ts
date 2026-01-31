@@ -20,7 +20,11 @@ export default () => {
 
   const translateViaLlm = async ({ term, sourceLang, targetLang }: TranslateParams) => {
     const prompt = getTranslationPrompt({ term, sourceLang, targetLang });
-    return JSON.parse(await llm.generate(prompt)) as Promise<TranslateResponse>;
+    let res = await llm.generate(prompt);
+    res = res
+      .replace(/^(```|""")\w*\n/, "")
+      .replace(/(```|""")$/, "");
+    return JSON.parse(res) as Promise<TranslateResponse>;
   }
 
   const detectLang = async (text: string, whitelist?: LangCode[]) => {

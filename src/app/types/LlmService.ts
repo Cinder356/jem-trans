@@ -1,8 +1,10 @@
-export type LlmServiceName = 'openrouter';
+
+export type LlmServiceName = 'openrouter' | 'llama';
 
 export interface ConfigureParams {
   model?: string;
   apiKey?: string;
+  address?: string;
 }
 
 export interface LlmService {
