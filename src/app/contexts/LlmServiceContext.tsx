@@ -1,35 +1,49 @@
-import { createContext, useRef, type PropsWithChildren } from "react";
-import { type LlmService } from "../types/LlmService";
+import { createContext, useState, type PropsWithChildren } from "react";
+import type { LlmServiceName, LlmService } from "../types/LlmService";
 import OpenRouterService from "../llmServices/OpenRouterService";
 import LlamaService from "../llmServices/LlamaService";
 import useSettings from "../hooks/useSettings";
+import type { GetPropertyFn } from "./SettingsContext";
 
-export const LlmServiceContext = createContext<LlmService | null>(null);
+interface LlmServiceValue {
+  llmService: LlmService,
+  changeLlmService: (llmServiceName: LlmServiceName) => void;
+}
+
+export const LlmServiceContext = createContext<LlmServiceValue | null>(null);
+
+const createLlmServiceInstance = (serviceName: LlmServiceName, getSettingsProperty: GetPropertyFn) => {
+  let newLlmService: LlmService | null = null;
+  switch (serviceName) {
+    case 'openrouter':
+      newLlmService = new OpenRouterService();
+      break;
+    case 'llama':
+      newLlmService = new LlamaService();
+  }
+
+  newLlmService.configure({
+    model: getSettingsProperty('model'),
+    apiKey: getSettingsProperty('apiKey'),
+    address: getSettingsProperty('serviceAddress')
+  });
+
+  return newLlmService;
+}
 
 export const LlmServiceProvider = ({ children }: PropsWithChildren) => {
   const { getProperty } = useSettings();
-  const llmServiceRef = useRef<LlmService | null>(null);
+  const [llmService, setLlmService] = useState<LlmService>(() => {
+    return createLlmServiceInstance(getProperty('llmService'), getProperty)
+  });
 
-  if (!llmServiceRef.current) {
-    // choosing service logic
-    const llmServiceName = getProperty('llmService');
-    switch (llmServiceName) {
-      case 'openrouter':
-        llmServiceRef.current = new OpenRouterService();
-        break;
-      case 'llama':
-        llmServiceRef.current = new LlamaService();
-    }
-
-    llmServiceRef.current.configure({
-      model: getProperty('model'),
-      apiKey: getProperty('apiKey'),
-      address: getProperty('serviceAddress')
-    });
+  const changeLlmService = (llmServiceName: LlmServiceName) => {
+    const newService = createLlmServiceInstance(llmServiceName, getProperty);
+    setLlmService(newService);
   }
 
   return (
-    <LlmServiceContext.Provider value={llmServiceRef.current}>
+    <LlmServiceContext.Provider value={{ llmService, changeLlmService }}>
       {children}
     </LlmServiceContext.Provider>
   )

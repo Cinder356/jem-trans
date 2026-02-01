@@ -5,15 +5,11 @@ import { Button } from "@/components/ui/button";
 
 export default function () {
   const { getProperty, isSaved, saveSettings } = useSettings();
-  const llmService = useLlmService();
+  const { changeLlmService } = useLlmService();
 
   const handleSave = () => {
     saveSettings();
-    llmService.configure({
-      model: getProperty('model'),
-      apiKey: getProperty('apiKey'),
-      address: getProperty('serviceAddress')
-    });
+    changeLlmService(getProperty('llmService'));
   }
 
   return (

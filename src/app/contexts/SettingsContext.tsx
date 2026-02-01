@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, createContext, type PropsWithChildren } from "react";
 import { setConfig, getAllConfigs, type AppSettings } from "@/app/stores/settingsStore";
 
-type GetPropertyFn = <K extends keyof AppSettings>(key: K) => AppSettings[K];
-type ChangePropertyFn = <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => void;
+export type GetPropertyFn = <K extends keyof AppSettings>(key: K) => AppSettings[K];
+export type ChangePropertyFn = <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => void;
 
 interface SettingsContextValue {
   getProperty: GetPropertyFn;

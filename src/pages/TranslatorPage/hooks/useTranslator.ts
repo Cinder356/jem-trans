@@ -16,7 +16,7 @@ export interface TranslateResponse {
 }
 
 export default () => {
-  const llm = useLlmService();
+  const { llmService: llm } = useLlmService();
 
   const translateViaLlm = async ({ term, sourceLang, targetLang }: TranslateParams) => {
     const prompt = getTranslationPrompt({ term, sourceLang, targetLang });
