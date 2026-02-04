@@ -24,7 +24,7 @@ export interface TranslationContextValue {
 export const TranslationContext = createContext<TranslationContextValue | null>(null);
 
 export const TranslationProvider = ({ children }: PropsWithChildren) => {
-  const { getProperty } = useSettings();
+  const { settings } = useSettings();
   const { getUserMeta, setUserMeta } = useUserMeta();
   const queryClient = useQueryClient();
   const [langPair, setLangPair] = useState<LangPair>(getUserMeta('lastLangPair'));
@@ -33,7 +33,7 @@ export const TranslationProvider = ({ children }: PropsWithChildren) => {
   const translationResult = useTranslateQuery({ term: textForQuery, sourceLang: langPair.source, targetLang: langPair.target });
 
   const [setTextForQueryDebounced, preventChangingTextForQuery]
-    = useDebouncedCallback((value: string) => setTextForQuery(value), getProperty('autoTranslateDelay'));
+    = useDebouncedCallback((value: string) => setTextForQuery(value), settings.autoTranslateDelay);
 
   const updateLangPair: UpdateLangPairFn = useCallback((value) => {
     queryClient.cancelQueries({ queryKey: DETECT_AND_SWAP_QUERY_KEY });
@@ -48,14 +48,14 @@ export const TranslationProvider = ({ children }: PropsWithChildren) => {
   const updateSourceText: UpdateSourceTextFn = useCallback((value) => {
     const trimmedValue = value.trim();
     sourceTextRef.current = trimmedValue;
-    if (getProperty('isAutoTranslateEnabled'))
+    if (settings.isAutoTranslateEnabled)
       if (trimmedValue)
         setTextForQueryDebounced(trimmedValue);
       else {
         preventChangingTextForQuery();
         setTextForQuery('');
       }
-  }, []);
+  }, [settings]);
 
   const swapLangs = useCallback(() => {
     setLangPair(prev => {

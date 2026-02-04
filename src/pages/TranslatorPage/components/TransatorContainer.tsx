@@ -8,7 +8,7 @@ import useSettings from '@/app/hooks/useSettings';
 import useDetectAndSwap from '../hooks/useDetectAndSwap';
 
 export default () => {
-  const { getProperty } = useSettings();
+  const { settings } = useSettings();
   const detectAndSwapLangs = useDetectAndSwap();
   const {
     translationResult: { translation, isFetching, isError, error },
@@ -33,7 +33,7 @@ export default () => {
           <div className='flex gap-1.5 p-0.5'>
             <Volume2 className='cursor-pointer' />
             <MicIcon className='cursor-pointer' />
-            {!getProperty('isAutoTranslateEnabled') &&
+            {!settings.isAutoLanguageSwitchEnabled &&
               <ChevronsRightIcon onClick={handleTranslate} className='cursor-pointer' />
             }
           </div>
@@ -47,7 +47,7 @@ export default () => {
           <Textarea className={cn(
             'flex-1 resize-none min-h-40',
             isError && 'text-red-400'
-          )} readOnly value={translation || error?.message} />
+          )} readOnly value={isError ? error?.message : translation} />
           <div className="absolute bottom-1.5 right-1.5 flex items-center gap-2 p-0.5">
             <Volume2 className='cursor-pointer' />
           </div>

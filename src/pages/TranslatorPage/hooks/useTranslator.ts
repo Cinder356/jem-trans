@@ -3,7 +3,6 @@ import { type LangDetectionResult } from '@/app/types/LangDetectionResult';
 import type { LangCode } from "@/app/types/Langs";
 import { getTranslationPrompt } from "@/app/consts/prompts";
 import useLlmService from "@/app/hooks/useLlmService";
-// import useSettings from "@/app/hooks/useSettings";
 
 export interface TranslateParams {
   term: string;
@@ -16,7 +15,7 @@ export interface TranslateResponse {
 }
 
 export default () => {
-  const { llmService: llm } = useLlmService();
+  const llm = useLlmService();
 
   const translateViaLlm = async ({ term, sourceLang, targetLang }: TranslateParams) => {
     const prompt = getTranslationPrompt({ term, sourceLang, targetLang });

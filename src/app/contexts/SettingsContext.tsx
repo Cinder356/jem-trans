@@ -1,12 +1,12 @@
-import { useState, useRef, useEffect, createContext, type PropsWithChildren } from "react";
+import { useState, useCallback, useRef, useEffect, createContext, type PropsWithChildren, useMemo } from "react";
 import { setConfig, getAllConfigs, type AppSettings } from "@/app/stores/settingsStore";
 
-export type GetPropertyFn = <K extends keyof AppSettings>(key: K) => AppSettings[K];
+// export type GetPropertyFn = <K extends keyof AppSettings>(key: K) => AppSettings[K];
 export type ChangePropertyFn = <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => void;
 
 interface SettingsContextValue {
-  getProperty: GetPropertyFn;
-  changeProperty: ChangePropertyFn;
+  settings: AppSettings;
+  changeSettingsProperty: ChangePropertyFn;
   setProperties: (value: AppSettings) => void;
   saveSettings: () => void;
   isSaved: boolean;
@@ -16,55 +16,56 @@ interface SettingsContextValue {
 export const SettingsContext = createContext<SettingsContextValue | null>(null);
 
 export const SettingsProvider = ({ children }: PropsWithChildren) => {
-  const savedSettingsRef = useRef<AppSettings | null>(null);
+  const [savedSettings, setSavedSettings] = useState<AppSettings | null>(null);
   const settingsRef = useRef<AppSettings | null>(null);
   const [isSaved, setIsSaved] = useState(true);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     getAllConfigs()
       .then((value) => {
         settingsRef.current = value;
-        savedSettingsRef.current = value;
-        setIsLoaded(true);
+        setSavedSettings(value);
       });
   }, []);
 
-  const getProperty: GetPropertyFn = (key) => {
-    if (!savedSettingsRef.current)
-      throw new Error('savedSettingsRef.current is null. Settings were not loaded.');
-    return savedSettingsRef.current[key];
-  }
-
-  const changeProperty: ChangePropertyFn = (key, value) => {
+  const changeSettingsProperty: ChangePropertyFn = useCallback((key, value) => {
     setIsSaved(false);
     settingsRef.current = { ...settingsRef.current!, [key]: value };
-  }
+  }, []);
 
-  const setProperties = (value: AppSettings) => {
+  const setProperties = useCallback((value: AppSettings) => {
     setIsSaved(false);
     settingsRef.current = value;
-  }
+  }, []);
 
-  const saveSettings = () => {
+  const saveSettings = useCallback(() => {
     (async () => {
       const entries = Object.entries(settingsRef.current!) as [keyof AppSettings, AppSettings[keyof AppSettings]][];
       const promises = entries.map(([key, value]) => setConfig(key, value));
       await Promise.all(promises);
     })();
     setIsSaved(true);
-    savedSettingsRef.current = settingsRef.current;
-  }
+    setSavedSettings(settingsRef.current);
+  }, []);
 
-  const restoreSettings = () => {
-    settingsRef.current = savedSettingsRef.current;
+  const restoreSettings = useCallback(() => {
+    settingsRef.current = savedSettings;
     setIsSaved(true);
-  }
+  }, [savedSettings]);
 
-  if (!isLoaded) return null;
+  const contextValue = useMemo(() => ({
+    settings: savedSettings!,
+    changeSettingsProperty,
+    setProperties,
+    saveSettings,
+    isSaved,
+    restoreSettings
+  }), [savedSettings, isSaved, changeSettingsProperty, setProperties, saveSettings, restoreSettings])
+
+  if (!savedSettings) return null;
 
   return (
-    <SettingsContext.Provider value={{ getProperty, changeProperty, setProperties, saveSettings, isSaved, restoreSettings }}>
+    <SettingsContext.Provider value={contextValue}>
       {children}
     </SettingsContext.Provider>
   )
