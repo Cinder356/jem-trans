@@ -1,25 +1,30 @@
 import { type LlmService, type ConfigureParams } from "../types/LlmService";
 
 
-class LlamaService implements LlmService {
+class OpenAiApiService implements LlmService {
   private _model: string = '';
-  private _endpoint: string = '';
-  // private _apiKey: string = '';
+  private _address: string = '';
+  private _apiKey: string = '';
+  private _temperature: number = .6;
 
-  configure({ model, address }: ConfigureParams): void {
+  configure({ model, address, apiKey, temperature }: ConfigureParams): void {
     if (model)
       this._model = model;
     if (address)
-      this._endpoint = `http://${address}/v1/chat/completions`;
-    // if (apiKey)
-    //   this._apiKey = apiKey;
+      this._address = address;
+    if (apiKey)
+      this._apiKey = apiKey;
+    if (temperature)
+      this._temperature = temperature;
   }
 
   async generate(prompt: string): Promise<string> {
-    const res = await fetch(this._endpoint, {
+
+    const res = await fetch(this._address, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this._apiKey}`
       },
       body: JSON.stringify({
         model: this._model,
@@ -28,7 +33,7 @@ class LlamaService implements LlmService {
           role: 'user',
           content: prompt
         }],
-        temperature: .5,
+        temperature: this._temperature,
       }),
     });
 
@@ -48,6 +53,4 @@ class LlamaService implements LlmService {
   }
 }
 
-
-
-export default LlamaService;
+export default OpenAiApiService;

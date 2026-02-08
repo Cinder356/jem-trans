@@ -1,16 +1,6 @@
 import { LazyStore } from '@tauri-apps/plugin-store';
-import { type LlmServiceName } from '../types/LlmService';
-import { DEFAULT_SETTINGS } from '../consts/defaultStoresValues';
+import { AppSettingsSchema, type AppSettings } from "../types/AppSettings";
 
-export interface AppSettings {
-  llmService: LlmServiceName;
-  serviceAddress: string;
-  model: string;
-  apiKey: string;
-  isAutoLanguageSwitchEnabled: boolean;
-  isAutoTranslateEnabled: boolean;
-  autoTranslateDelay: number;
-}
 
 const store = new LazyStore('settings.json');
 
@@ -19,13 +9,19 @@ export async function setConfig<K extends keyof AppSettings>(key: K, value: AppS
   await store.save();
 }
 
-export async function getConfig<K extends keyof AppSettings>(key: K): Promise<AppSettings[K] | undefined> {
-  const value = await store.get<AppSettings[K]>(key);
-  return value ?? DEFAULT_SETTINGS[key];
-}
+// export async function getConfig<K extends keyof AppSettings>(key: K): Promise<AppSettings[K] | undefined> {
+//   let value = await store.get<AppSettings[K]>(key);
+//   const parsed = AppSettingsSchema.safeParse(value);
+//   return parsed.data[key];
+// }
 
-export async function getAllConfigs() {
+export async function getAllConfigs(): Promise<AppSettings> {
   const entries = await store.entries<any>();
   const allSettings = Object.fromEntries(entries);
-  return { ...DEFAULT_SETTINGS, ...allSettings } as AppSettings;
+
+  // 1. We parse the settings. 
+  // 2. We use .catch() to provide a fallback if 'allSettings' is invalid.
+  // 3. The fallback is AppSettingsSchema.parse({}), which returns all defaults.
+
+  return AppSettingsSchema.catch(AppSettingsSchema.parse({})).parse(allSettings);
 }

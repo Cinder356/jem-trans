@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect, createContext, type PropsWithChildren, useMemo } from "react";
-import { setConfig, getAllConfigs, type AppSettings } from "@/app/stores/settingsStore";
+import { setConfig, getAllConfigs } from "@/app/stores/settingsStore";
+import { type AppSettings } from "../types/AppSettings";
 
 // export type GetPropertyFn = <K extends keyof AppSettings>(key: K) => AppSettings[K];
 export type ChangePropertyFn = <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => void;

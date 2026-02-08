@@ -19,29 +19,27 @@ export default function () {
       <SelectProperty label="LLM Service"
         defaultValue={settings.llmService}
         selectItems={[
-          { value: 'openrouter', label: 'OpenRouter' },
-          { value: 'llama', label: 'Llama' }
+          { value: 'OpenRouter', label: 'OpenRouter' },
+          { value: 'OpenAiApi', label: 'OpenAI API' }
         ]}
         onChange={(value) => {
           setCurrentLlmService(value);
           changeSettingsProperty('llmService', value)
         }}
         hint="Where your LLM runs." />
-      {['llama'].includes(currentLlmService) &&
+      {['OpenAiApi'].includes(currentLlmService) &&
         <TextProperty id='service-address-input' label='Service address'
           defaultValue={settings.serviceAddress}
           onChange={(value) => changeSettingsProperty('serviceAddress', value)}
           hint="An address of your service. For local llama server - localhost:8080" />}
-      {['openrouter'].includes(currentLlmService) &&
-        <TextProperty id='model-input' label='Model'
-          defaultValue={settings.model}
-          onChange={(value) => changeSettingsProperty('model', value)}
-          hint="An LLM model, you can find this on your provider's website" />}
-      {['openrouter'].includes(currentLlmService) &&
-        <TextProperty id='api-key-input' label='API Key'
-          defaultValue={settings.apiKey}
-          onChange={(value) => changeSettingsProperty('apiKey', value)}
-          hint="A key for making queries to LLM provider. You can find it in your provider's profile." />}
+      <TextProperty id='model-input' label='Model'
+        defaultValue={settings.model}
+        onChange={(value) => changeSettingsProperty('model', value)}
+        hint="An LLM model, you can find this on your provider's website" />
+      <TextProperty id='api-key-input' label='API Key'
+        defaultValue={settings.apiKey}
+        onChange={(value) => changeSettingsProperty('apiKey', value)}
+        hint="A key for making queries to LLM provider. You can find it in your provider's profile." />
       <SwitchProperty id='auto-language-switching-switch' label='Auto language switching'
         defaultValue={settings.isAutoLanguageSwitchEnabled}
         onChange={(value) => changeSettingsProperty('isAutoLanguageSwitchEnabled', value)}
