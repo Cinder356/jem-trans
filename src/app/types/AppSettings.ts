@@ -1,5 +1,5 @@
 import z from "zod";
-import { LlmServiceNameSchema } from "./LlmService";
+import { LlmServiceNameSchema } from "./LlmServiceName";
 
 export const AppSettingsSchema = z.object({
   llmService: LlmServiceNameSchema.default('OpenRouter'),

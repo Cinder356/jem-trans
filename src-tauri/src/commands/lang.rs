@@ -17,9 +17,9 @@ pub fn detect_language(text: String, whitelist: Option<Vec<String>>) -> Option<D
             .iter()
             .filter_map(|code| Lang::from_code(code))
             .collect();
-        
+
         if allowlist.is_empty() {
-            Detector::new() 
+            Detector::new()
         } else {
             Detector::with_allowlist(allowlist)
         }

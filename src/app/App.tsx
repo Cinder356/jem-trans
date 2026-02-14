@@ -1,19 +1,14 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useEffect } from 'react';
 import './styles/index.css';
 import useLoadColors from './hooks/useLoadColors';
+import useNeuralSetup from './hooks/useNeuralSetup';
 import AppBar from '@/components/AppBar/AppBar';
 import Outlet from '@/components/Outlet/Outlet';
 import { PageProvider } from './contexts/PageContext';
-import { SettingsProvider } from './contexts/SettingsContext';
-import { LlmServiceProvider } from './contexts/LlmServiceContext';
-import { UserMetaProvider } from './contexts/UserMetaContext';
-
-import { useEffect } from 'react';
-
-const queryClient = new QueryClient();
 
 function App() {
   useLoadColors();
+  useNeuralSetup();
 
   useEffect(() => {
     document.documentElement.classList.add("gtk-theme");
@@ -21,20 +16,12 @@ function App() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <SettingsProvider>
-        <UserMetaProvider>
-          <LlmServiceProvider>
-            <PageProvider>
-              <AppBar />
-              <main>
-                <Outlet />
-              </main>
-            </PageProvider>
-          </LlmServiceProvider>
-        </UserMetaProvider>
-      </SettingsProvider>
-    </QueryClientProvider>
+    <PageProvider>
+      <AppBar />
+      <main>
+        <Outlet />
+      </main>
+    </PageProvider>
   );
 }
 

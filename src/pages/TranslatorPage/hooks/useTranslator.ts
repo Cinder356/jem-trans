@@ -2,7 +2,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { type LangDetectionResult } from '@/app/types/LangDetectionResult';
 import type { LangCode } from "@/app/types/Langs";
 import { getTranslationPrompt } from "@/app/consts/prompts";
-import useLlmService from "@/app/hooks/useLlmService";
+import useSettings from "@/app/hooks/useSettings";
 
 export interface TranslateParams {
   term: string;
@@ -15,15 +15,28 @@ export interface TranslateResponse {
 }
 
 export default () => {
-  const llm = useLlmService();
+  const { settings } = useSettings();
 
   const translateViaLlm = async ({ term, sourceLang, targetLang }: TranslateParams) => {
     const prompt = getTranslationPrompt({ term, sourceLang, targetLang });
-    let res = await llm.generate(prompt);
-    res = res
-      .replace(/^(```|""")\w*\n/, "")
-      .replace(/(```|""")$/, "");
-    return JSON.parse(res) as Promise<TranslateResponse>;
+    try {
+      let res = await invoke("ask_llm", {
+        model: settings.model,
+        temperature: .7,
+        messages: [{
+          role: 'user',
+          content: prompt
+        }]
+      }) as string;
+
+      res = res
+        .replace(/^(```|""")\w*\n/, "")
+        .replace(/(```|""")$/, "");
+
+      return JSON.parse(res) as Promise<TranslateResponse>;
+    } catch (err) {
+      throw new Error(err as string);
+    }
   }
 
   const detectLang = async (text: string, whitelist?: LangCode[]) => {

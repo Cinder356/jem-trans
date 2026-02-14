@@ -30,3 +30,5 @@ tauri-plugin-store = "2.4.1"
 # Включаем feature "serde" для whatlang, чтобы Lang и Script можно было отправлять на фронт
 whatlang = { version = "0.18", features = ["serde"] }
 directories = "6.0"
+tokio = { version = "1", features = ["full"] }
+async-openai = { version = "0.32.4", features = ["full"] }
