@@ -1,6 +1,7 @@
 use serde::Deserialize;
+use specta::Type;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Type)]
 pub struct ChatMessage {
     pub role: String,
     pub content: String,

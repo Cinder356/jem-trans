@@ -2,10 +2,12 @@ use crate::logic::parse_chat_messages;
 use crate::models::ChatMessage;
 use crate::state::AppState;
 use async_openai::{config::OpenAIConfig, types::chat::CreateChatCompletionRequestArgs, Client};
+use specta;
 use std::sync::Arc;
 use tauri::State;
 
 #[tauri::command]
+#[specta::specta]
 pub async fn set_llm_config(
     api_key: String,
     api_url: String,
@@ -23,6 +25,7 @@ pub async fn set_llm_config(
 }
 
 #[tauri::command]
+#[specta::specta]
 pub async fn ask_llm(
     messages: Vec<ChatMessage>,
     model: String,
