@@ -1,5 +1,5 @@
 import { Switch } from '@/components/ui/switch';
-import LabelWithHint from './LabelWithHint';
+import LabelWithHint from '../LabelWithHint';
 
 interface SwitchPropertyProps {
   id: string;

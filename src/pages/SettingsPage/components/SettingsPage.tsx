@@ -1,5 +1,5 @@
 import SettingsBarActions from "./SettingsBarActions";
-import SettingsList from './SettingsList/SettingsList.tsx';
+import SettingsList from './SettingsList.tsx';
 
 export default function () {
 

@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import LabelWithHint from "./LabelWithHint";
+import LabelWithHint from "../LabelWithHint";
 
 interface TextPropertyProps<T extends string> {
   selectItems: { value: T, label: string }[];

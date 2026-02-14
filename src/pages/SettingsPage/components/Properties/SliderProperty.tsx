@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Slider } from "@/components/ui/slider"
-import LabelWithHint from './LabelWithHint';
+import LabelWithHint from '../LabelWithHint';
 
 interface SliderPropertyProps {
   label: string;
