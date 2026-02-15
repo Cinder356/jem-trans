@@ -4,6 +4,7 @@ import SwitchProperty from './Properties/SwitchProperty';
 import SliderProperty from "./Properties/SliderProperty";
 import ServiceGroup from "./SettintsGroups/ServiceGroup";
 import ProxyGroup from "./SettintsGroups/ProxyGroup";
+import { Separator } from "@radix-ui/react-select";
 
 export default function () {
   const { settings, changeSettingsProperty, restoreSettings } = useSettings();
@@ -16,6 +17,8 @@ export default function () {
       </p>
 
       <ServiceGroup settings={settings} changeSettingsProperty={changeSettingsProperty} />
+
+      <Separator />
 
       <SwitchProperty id='auto-language-switching-switch' label='Auto language switching'
         defaultValue={settings.isAutoLanguageSwitchEnabled}

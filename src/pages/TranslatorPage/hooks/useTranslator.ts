@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { commands } from '@/bindings';
 import { type LangDetectionResult } from '@/app/types/LangDetectionResult';
@@ -17,13 +18,22 @@ export interface TranslateResponse {
 
 export default () => {
   const { settings } = useSettings();
+  const llmProfile = useMemo(() => {
+    const profile = settings.llmProfiles.find(p => p.id === settings.activeLlmProfileId);
+    if (profile)
+      return profile;
+    console.error("Couldn't find selected llm profile.");
+  }, [settings.activeLlmProfileId, settings.llmProfiles])
 
   const translateViaLlm = async ({ term, sourceLang, targetLang }: TranslateParams) => {
+    if (!llmProfile)
+      throw new Error("AI model profile is not selected.")
+
     const prompt = getTranslationPrompt({ term, sourceLang, targetLang });
     const response = await commands.askLlm([{
       role: 'user',
       content: prompt
-    }], settings.model, .7);
+    }], llmProfile.model, .7);
 
     if (response.status === 'error')
       throw new Error(response.error);

@@ -1,12 +1,21 @@
 import { useEffect } from "react";
 import { commands } from "@/bindings";
 import useSettings from "./useSettings";
+import { AI_SERVICES } from "../consts/aiServices";
 
 export default () => {
   const { settings } = useSettings();
 
   useEffect(() => {
-    commands.setLlmConfig(settings.apiKey, settings.serviceAddress)
+    const profile = settings.llmProfiles.find(p => p.id === settings.activeLlmProfileId);
+    if (!profile) {
+      console.error("Couldn't find selected llm profile.");
+      return;
+    }
+    const apiUrl = profile.aiService === 'openaimanual'
+      ? profile.serviceUrl
+      : AI_SERVICES[profile.aiService].url;
+    commands.setLlmConfig(profile.apiKey, apiUrl)
       .catch(err => console.error(err));
-  }, [settings.apiKey, settings.serviceAddress])
+  }, [settings.activeLlmProfileId])
 }
