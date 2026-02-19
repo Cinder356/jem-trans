@@ -15,7 +15,9 @@ export default function ({ id, label, defaultValue, onChange, hint, ...props }: 
   return (
     <div className='grid w-full items-center gap-1'>
       <LabelWithHint htmlFor={id} label={label} hint={hint} />
-      <Input {...props} defaultValue={defaultValue} onChange={(e) => onChange?.(e.target.value)} className='h-8' id={id} />
+      <Input {...props} defaultValue={defaultValue}
+        onChange={(e) => onChange?.(e.target.value)}
+        id={id} />
     </div>
   )
 }

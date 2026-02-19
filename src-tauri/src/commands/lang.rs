@@ -13,10 +13,7 @@ pub struct DetectionResult {
 #[tauri::command]
 pub fn detect_language(text: String, whitelist: Option<Vec<String>>) -> Option<DetectionResult> {
     let detector = if let Some(codes) = whitelist {
-        let allowlist: Vec<Lang> = codes
-            .iter()
-            .filter_map(|code| Lang::from_code(code))
-            .collect();
+        let allowlist: Vec<Lang> = codes.iter().filter_map(Lang::from_code).collect();
 
         if allowlist.is_empty() {
             Detector::new()

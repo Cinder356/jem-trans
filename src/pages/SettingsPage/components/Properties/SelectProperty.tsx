@@ -19,6 +19,7 @@ interface TextPropertyProps<T extends string> {
   placeholder?: string;
 }
 
+
 export default function <T extends string>({ selectItems, label, className, value, defaultValue, onChange, hint, placeholder }: TextPropertyProps<T>) {
   return (
     <div className={cn([
@@ -26,8 +27,8 @@ export default function <T extends string>({ selectItems, label, className, valu
       className
     ])}>
       <LabelWithHint label={label} hint={hint} />
-      <Select value={value} defaultValue={defaultValue} onValueChange={onChange}>
-        <SelectTrigger className="flex w-full">
+      <Select disabled={selectItems.length === 0} value={value} defaultValue={defaultValue} onValueChange={onChange}>
+        <SelectTrigger className="flex w-full overflow-hidden">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>

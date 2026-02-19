@@ -2,23 +2,19 @@ import { useEffect } from "react";
 import useSettings from "@/app/hooks/useSettings";
 import SwitchProperty from './Properties/SwitchProperty';
 import SliderProperty from "./Properties/SliderProperty";
-import ServiceGroup from "./SettintsGroups/ServiceGroup";
+import ModelProfileGroup from "./SettintsGroups/ModelProfileGroup";
 import ProxyGroup from "./SettintsGroups/ProxyGroup";
-import { Separator } from "@radix-ui/react-select";
+import { Separator } from "@/components/ui/separator";
 
 export default function () {
   const { settings, changeSettingsProperty, restoreSettings } = useSettings();
   useEffect(() => restoreSettings(), []);
 
   return (
-    <div className="flex flex-col gap-4 max-w-max w-[80%] mt-2 mx-auto">
-      <p className='text-xs leading-tight font-normal opacity-20'>
-        This app uses OpenRouter API. So, you need to enter model name and your API key. You can find this on OpenRouter website.
-      </p>
+    <div className="flex flex-col gap-4 max-w-xl w-[75%] mt-2 mx-auto">
 
-      <ServiceGroup settings={settings} changeSettingsProperty={changeSettingsProperty} />
-
-      <Separator />
+      <ModelProfileGroup settings={settings} changeSettingsProperty={changeSettingsProperty} />
+      <Separator className="my-2" />
 
       <SwitchProperty id='auto-language-switching-switch' label='Auto language switching'
         defaultValue={settings.isAutoLanguageSwitchEnabled}

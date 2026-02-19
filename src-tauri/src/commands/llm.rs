@@ -2,6 +2,7 @@ use crate::logic::parse_chat_messages;
 use crate::models::ChatMessage;
 use crate::state::AppState;
 use async_openai::{config::OpenAIConfig, types::chat::CreateChatCompletionRequestArgs, Client};
+use serde_json::Value;
 use specta;
 use std::sync::Arc;
 use tauri::State;
@@ -46,14 +47,22 @@ pub async fn ask_llm(
         .stream(false)
         .build()
         .map_err(|e| e.to_string())?;
-    let response = client
+
+    // ВАЖНО: тип ответа — serde_json::Value, чтобы избежать ошибок десериализации
+    let resp_json: Value = client
         .chat()
-        .create(request)
+        .create_byot(request) // <- вместо .create(...)
         .await
         .map_err(|e| format!("API error: {}", e))?;
-    Ok(response.choices[0]
-        .message
-        .content
-        .clone()
-        .unwrap_or_default())
+
+    // Извлекаем текст (проверьте по реальному JSON — путь может отличаться)
+    let content = resp_json
+        .get("choices")
+        .and_then(|c| c.get(0))
+        .and_then(|ch| ch.get("message").and_then(|m| m.get("content")))
+        .and_then(|v| v.as_str())
+        .unwrap_or_default()
+        .to_string();
+
+    Ok(content)
 }

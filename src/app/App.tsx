@@ -11,8 +11,8 @@ function App() {
   useNeuralSetup();
 
   useEffect(() => {
-    document.documentElement.classList.add("gtk-theme");
-    // document.documentElement.classList.add("dark");
+    // document.documentElement.classList.add("gtk-theme");
+    document.documentElement.classList.add("dark");
   }, []);
 
   return (

@@ -7,7 +7,6 @@ import SelectProperty from "../Properties/SelectProperty";
 import SwitchProperty from '../Properties/SwitchProperty';
 import { DEFAULT_AI_SERVICE, AI_SERVICE_KEYS, AI_SERVICES } from '@/app/consts/aiServices';
 
-
 export default ({ settings, changeSettingsProperty }: SettingsGroupProps) => {
   const [activeProfileId, setActiveProfileId] = useState(settings.activeLlmProfileId);
   const [profiles, setProfiles] = useState(settings.llmProfiles);
@@ -60,6 +59,7 @@ export default ({ settings, changeSettingsProperty }: SettingsGroupProps) => {
 
   return (
     <div className='flex flex-col gap-2'>
+      <p className='mx-auto text-lg'>Model profile</p>
       <div className="flex items-end gap-2">
         <SelectProperty label='Model'
           value={isProfileIdValid
