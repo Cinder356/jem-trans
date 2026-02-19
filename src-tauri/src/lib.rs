@@ -45,29 +45,18 @@ pub fn run() {
             voices: tokio::sync::RwLock::new(voices),
         }))
         .setup(|app| {
-            // Инициализируем аудио-поток при старте
             let state = app.try_state::<Arc<AppState>>().unwrap();
 
             if let Ok(stream) = rodio::OutputStreamBuilder::open_default_stream() {
-                // "Утекаем" поток, чтобы он жил постоянно
-                let stream_ref: &'static mut rodio::OutputStream = Box::leak(Box::new(stream));
+                let mixer = stream.mixer().clone();
 
-                // Получаем mixer и клонируем его
-                let mixer = stream_ref.mixer();
-                let mixer_clone = mixer.clone();
-
-                // Сначала сохраняем stream_ref
                 let rt = tokio::runtime::Runtime::new().unwrap();
                 rt.block_on(async {
                     let mut audio_stream = state._audio_stream.lock().await;
-                    *audio_stream = Some(stream_ref);
-                });
-
-                // Инициализируем audio_mixer
-                let rt = tokio::runtime::Runtime::new().unwrap();
-                rt.block_on(async {
                     let mut audio_mixer = state.audio_mixer.lock().await;
-                    *audio_mixer = Some(Arc::new(mixer_clone));
+
+                    *audio_stream = Some(Box::new(stream));
+                    *audio_mixer = Some(Arc::new(mixer));
                 });
             }
 

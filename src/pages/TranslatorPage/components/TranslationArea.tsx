@@ -3,12 +3,18 @@ import { Spinner } from '@/components/ui/spinner';
 import { Volume2 } from 'lucide-react';
 import useTranslation from '../hooks/useTranslation';
 import { cn } from '@/lib/utils';
+import useTextToSpeech from '../hooks/useTextToSpeech';
 
 
 export default function () {
   const {
     translationResult: { translation, isFetching, isError, error },
   } = useTranslation();
+  const { speak } = useTextToSpeech();
+
+  const handleSpeak = () => {
+    speak(translation);
+  }
 
   return (
     <div className="relative">
@@ -21,7 +27,7 @@ export default function () {
           isError && 'text-red-400'
         )} readOnly value={isError ? error?.message : translation} />
         <div className="absolute bottom-1.5 right-1.5 flex items-center gap-2 p-0.5">
-          <Volume2 className='cursor-pointer' />
+          <Volume2 onClick={handleSpeak} className='cursor-pointer' />
         </div>
       </div>
       {isFetching && <Spinner className='size-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2' />}
