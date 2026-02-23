@@ -2,6 +2,7 @@ import z from "zod";
 import { ModelProfileSchema } from "./ModelProfile";
 
 export const AppSettingsSchema = z.object({
+  voice: z.string().default('en-US-AvaMultilingualNeural'),
   activeLlmProfileId: z.string().default(''),
   llmProfiles: z.array(ModelProfileSchema).default([]),
   isAutoLanguageSwitchEnabled: z.boolean().default(true),
