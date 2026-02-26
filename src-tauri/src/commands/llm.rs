@@ -2,6 +2,7 @@ use crate::logic::parse_chat_messages;
 use crate::models::ChatMessage;
 use crate::state::AppState;
 use async_openai::{config::OpenAIConfig, types::chat::CreateChatCompletionRequestArgs, Client};
+use reqwest::{ClientBuilder, Proxy};
 use serde_json::Value;
 use specta;
 use std::sync::Arc;
@@ -12,12 +13,21 @@ use tauri::State;
 pub async fn set_llm_config(
     api_key: String,
     api_url: String,
+    proxy_url: Option<String>,
     state: State<'_, Arc<AppState>>,
 ) -> Result<(), String> {
+    let mut client_builder = ClientBuilder::new();
+
+    if let Some(proxy) = proxy_url {
+        let proxy = Proxy::all(&proxy).map_err(|e| format!("Invalid proxy URL: {}", e))?;
+        client_builder = client_builder.proxy(proxy);
+    }
+
+    let http_client = client_builder.build().map_err(|e| e.to_string())?;
     let config = OpenAIConfig::new()
         .with_api_key(api_key)
         .with_api_base(api_url);
-    let client = Client::with_config(config);
+    let client = Client::with_config(config).with_http_client(http_client);
 
     let mut client_guard = state.openai_client.lock().await;
     *client_guard = Some(client);

@@ -1,7 +1,6 @@
 mod commands;
 mod logic;
 mod models;
-mod proxy_setup;
 mod state;
 
 use specta_typescript::Typescript;
@@ -14,8 +13,7 @@ use tokio::sync::Mutex;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     std::env::set_var("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
-    proxy_setup::init_env_from_settings();
-
+    //
     // Load voices on startup
     let rt = tokio::runtime::Runtime::new().unwrap();
     let voices = rt

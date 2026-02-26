@@ -5,9 +5,9 @@
 
 
 export const commands = {
-async setLlmConfig(apiKey: string, apiUrl: string) : Promise<Result<null, string>> {
+async setLlmConfig(apiKey: string, apiUrl: string, proxyUrl: string | null) : Promise<Result<null, string>> {
     try {
-    return { status: "ok", data: await TAURI_INVOKE("set_llm_config", { apiKey, apiUrl }) };
+    return { status: "ok", data: await TAURI_INVOKE("set_llm_config", { apiKey, apiUrl, proxyUrl }) };
 } catch (e) {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
