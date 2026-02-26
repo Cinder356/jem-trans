@@ -29,7 +29,7 @@ export default () => {
     if (!llmProfile)
       throw new Error("AI model profile is not selected.")
 
-    const prompt = getTranslationPrompt({ term, sourceLang, targetLang });
+    const prompt = getTranslationPrompt({ text: term, sourceLang, targetLang });
     const response = await commands.askLlm([{
       role: 'user',
       content: prompt

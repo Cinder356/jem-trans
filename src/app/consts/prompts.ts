@@ -1,13 +1,25 @@
 import type { LangCode } from "../types/Langs";
 
 interface GetTranslationPromptParams {
-  term: string;
+  text: string;
   sourceLang: LangCode | 'auto';
   targetLang: LangCode;
 }
 
-export const getTranslationPrompt = ({ term, sourceLang, targetLang }: GetTranslationPromptParams) => {
-  return (
-    `Translate the text ${term} from ${sourceLang} to ${targetLang}. If ${sourceLang} == "auto", detect the source language automatically. Output exactly one valid JSON object with a single key "translation", e.g. {"translation":"..."} — no extra text, keys, comments, or markup. Preserve punctuation and basic formatting; keep the translation natural and concise.`
-  )
+export const getTranslationPrompt = ({ text, sourceLang, targetLang }: GetTranslationPromptParams) => {
+  return `You are an expert linguist and professional translator. Your task is to translate the provided text from ${sourceLang} to ${targetLang}.
+
+Strictly adhere to the following rules:
+1. Translate the text accurately, preserving the original meaning, tone, nuances, and formatting.
+2. Output strictly and ONLY in valid JSON format.
+3. Do not include any markdown formatting (e.g., \`\`\`json), conversational filler, explanations, or greetings.
+4. Ensure any quotation marks or special characters inside the translated text are properly escaped to maintain valid JSON.
+
+Expected JSON Output Format:
+  { "translation": "<translated text goes here>" }
+
+Input Data:
+Source Language: ${sourceLang}
+Target Language: ${targetLang}
+Text to translate: ${text}`
 }
